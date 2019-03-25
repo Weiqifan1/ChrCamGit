@@ -1,7 +1,9 @@
 package com.example.chrcam2
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.support.v7.app.AppCompatActivity
@@ -20,8 +22,9 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
-//2019-03-25: Kilde:
+//2019-03-25: Kilder:
 //https://demonuts.com/pick-image-gallery-camera-android-kotlin/
+//https://www.techotopia.com/index.php/Kotlin_-_Video_Recording_and_Image_Capture_on_Android_using_Camera_Intents
 
 import com.example.chrcam2.mediaPack.Picture as PictureImp
 
@@ -33,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     private val GALLERY = 1
     private val CAMERA = 2
+    private val VIDEO = 3
 
     companion object {
         private val IMAGE_DIRECTORY = "/kotlin_hold_B"
@@ -60,12 +64,13 @@ class MainActivity : AppCompatActivity() {
     private fun showPictureDialog() {
         val pictureDialog = AlertDialog.Builder(this)
         pictureDialog.setTitle("Select Action")
-        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture photo from camera")
+        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture photo from camera", "Capture video from camera")
         pictureDialog.setItems(pictureDialogItems
         ) { dialog, which ->
             when (which) {
                 0 -> choosePhotoFromGallary()
                 1 -> takePhotoFromCamera()
+                2 -> filmVideoFromCamera()
             }
         }
         pictureDialog.show()
@@ -83,13 +88,16 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, CAMERA)
     }
 
+    private fun filmVideoFromCamera() {
+        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+        startActivityForResult(intent, VIDEO)
+    }
+
+
     public override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
 
         super.onActivityResult(requestCode, resultCode, data)
-        /* if (resultCode == this.RESULT_CANCELED)
-         {
-         return
-         }*/
+
         if (requestCode == GALLERY)
         {
             if (data != null)
@@ -117,6 +125,24 @@ class MainActivity : AppCompatActivity() {
             IVW!!.setImageBitmap(thumbnail)
             saveImage(thumbnail)
             Toast.makeText(this@MainActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
+        }
+        else if (requestCode == VIDEO){
+
+                if (data != null) {
+                    val videoUri = data.data
+                    if (resultCode == Activity.RESULT_OK) {
+
+                        Toast.makeText(this, "Video saved to:\n"
+                                + videoUri, Toast.LENGTH_LONG).show()
+                    } else if (resultCode == Activity.RESULT_CANCELED) {
+                        Toast.makeText(this, "Video recording cancelled.",
+                            Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, "Failed to record video",
+                            Toast.LENGTH_LONG).show()
+                    }
+                }
+
         }
     }
 
