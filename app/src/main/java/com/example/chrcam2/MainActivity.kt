@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -22,10 +23,14 @@ import java.util.*
 //2019-03-25: Kilde:
 //https://demonuts.com/pick-image-gallery-camera-android-kotlin/
 
+import com.example.chrcam2.mediaPack.Picture as PictureImp
+
 class MainActivity : AppCompatActivity() {
 
-    private var btn: Button? = null
-    private var imageview: ImageView? = null
+    private var BTN: Button? = null
+    private var IVW: ImageView? = null
+    private var TVW: TextView? = null
+
     private val GALLERY = 1
     private val CAMERA = 2
 
@@ -37,10 +42,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btn = findViewById<View>(R.id.btn) as Button
-        imageview = findViewById<View>(R.id.iv) as ImageView
+        BTN = findViewById<View>(R.id.btn) as Button
+        IVW = findViewById<View>(R.id.iv) as ImageView
 
-        btn!!.setOnClickListener { showPictureDialog() }
+        TVW = findViewById<View>(R.id.textView2) as TextView
+
+        TVW!!.setOnClickListener{
+            TVW!!.text == "det virker"
+            Toast.makeText(this@MainActivity, "PictureImp.writeText()", Toast.LENGTH_SHORT).show()
+        }
+
+
+        BTN!!.setOnClickListener { showPictureDialog() }
 
     }
 
@@ -87,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                     val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
                     val path = saveImage(bitmap)
                     Toast.makeText(this@MainActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
-                    imageview!!.setImageBitmap(bitmap)
+                    IVW!!.setImageBitmap(bitmap)
 
                 }
                 catch (e: IOException) {
@@ -101,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         else if (requestCode == CAMERA)
         {
             val thumbnail = data!!.extras!!.get("data") as Bitmap
-            imageview!!.setImageBitmap(thumbnail)
+            IVW!!.setImageBitmap(thumbnail)
             saveImage(thumbnail)
             Toast.makeText(this@MainActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
         }
