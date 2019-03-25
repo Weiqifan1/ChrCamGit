@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA = 2
 
     companion object {
-        private val IMAGE_DIRECTORY = "/demonuts"
+        private val IMAGE_DIRECTORY = "/kotlin_hold_B"
     }
 
     override fun onCreate(savedInstanceState:Bundle?) {
