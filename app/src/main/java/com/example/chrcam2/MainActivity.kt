@@ -4,18 +4,18 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() {
     public override fun onActivityResult(requestCode:Int, resultCode:Int, data: Intent?) {
 
         super.onActivityResult(requestCode, resultCode, data)
+        setContentView(R.layout.activity_main)
 
         if (requestCode == GALLERY)
         {
@@ -127,25 +128,23 @@ class MainActivity : AppCompatActivity() {
             saveImage(thumbnail)
             Toast.makeText(this@MainActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
         }
+
+        //super.onActivityResult(requestCode, resultCode, data)
         else if (requestCode == VIDEO){
 
-                if (data != null) {
-                    val videoUri = data.data
-                    if (resultCode == Activity.RESULT_OK) {
-                        // Videoen gemmes her: /storage/emulated/0/DCIM/Camera/VID_20190325_175604.mp4
-                        Toast.makeText(this, "Video saved to:\n"
-                                + videoUri, Toast.LENGTH_LONG).show()
-                    } else if (resultCode == Activity.RESULT_CANCELED) {
-                        Toast.makeText(this, "Video recording cancelled.",
-                            Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(this, "Failed to record video",
-                            Toast.LENGTH_LONG).show()
-                    }
-                }
-                //jeg proever at gemme videoen.
+            if (resultCode == Activity.RESULT_OK) {
+                val videoUri: Uri = data!!.data!!;
+                Toast.makeText(this, "Video saved to:\n"
+                        + videoUri, Toast.LENGTH_LONG).show()
 
-
+                val videoView = findViewById<VideoView>(R.id.chrVideo)
+                val mediaController = MediaController(this)
+                mediaController.setAnchorView(videoView)
+                videoView.setMediaController(mediaController)
+                videoView.setVideoURI(videoUri)
+                videoView.requestFocus()
+                videoView.start()
+            }
 
         }
     }
@@ -188,3 +187,23 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+
+
+/*
+    //videocode
+    if (data != null) {
+        val videoUri = data.data
+        if (resultCode == Activity.RESULT_OK) {
+            // Videoen gemmes her: /storage/emulated/0/DCIM/Camera/VID_20190325_175604.mp4
+            Toast.makeText(this, "Video saved to:\n"
+                    + videoUri, Toast.LENGTH_LONG).show()
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Toast.makeText(this, "Video recording cancelled.",
+                Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, "Failed to record video",
+                Toast.LENGTH_LONG).show()
+        }
+    }
+    //jeg proever at gemme videoen.
+*/
