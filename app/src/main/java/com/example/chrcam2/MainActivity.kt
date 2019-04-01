@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity() {
         {
             val thumbnail = data!!.extras!!.get("data") as Bitmap
             IVW!!.setImageBitmap(thumbnail)
+            // billede gemmes til: /storage/emulated/0/kotlin_hold_B/
             saveImage(thumbnail)
             Toast.makeText(this@MainActivity, "Image Saved!", Toast.LENGTH_SHORT).show()
         }
@@ -131,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                 if (data != null) {
                     val videoUri = data.data
                     if (resultCode == Activity.RESULT_OK) {
-
+                        // Videoen gemmes her: /storage/emulated/0/DCIM/Camera/VID_20190325_175604.mp4
                         Toast.makeText(this, "Video saved to:\n"
                                 + videoUri, Toast.LENGTH_LONG).show()
                     } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -142,6 +143,9 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG).show()
                     }
                 }
+                //jeg proever at gemme videoen.
+
+
 
         }
     }
