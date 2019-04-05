@@ -4,6 +4,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+
+import android.content.res.AssetFileDescriptor
+import android.net.Uri
+import android.widget.*
+import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.support.v7.app.AppCompatActivity
@@ -52,8 +59,8 @@ class MainActivity : AppCompatActivity() {
         TVW = findViewById<View>(R.id.textView2) as TextView
 
         TVW!!.setOnClickListener{
-            TVW!!.text == "det virker"
-            Toast.makeText(this@MainActivity, "PictureImp.writeText()", Toast.LENGTH_SHORT).show()
+            //TVW!!.text == "det virker"
+            Toast.makeText(this@MainActivity, "det virker!", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -135,6 +142,15 @@ class MainActivity : AppCompatActivity() {
                         // Videoen gemmes her: /storage/emulated/0/DCIM/Camera/VID_20190325_175604.mp4
                         Toast.makeText(this, "Video saved to:\n"
                                 + videoUri, Toast.LENGTH_LONG).show()
+
+                        val videoView = findViewById<VideoView>(R.id.chrVideo)
+                        val mediaController = MediaController(this)
+                        mediaController.setAnchorView(videoView)
+                        videoView.setMediaController(mediaController)
+                        videoView.setVideoURI(videoUri)
+                        videoView.requestFocus()
+                        videoView.start()
+
                     } else if (resultCode == Activity.RESULT_CANCELED) {
                         Toast.makeText(this, "Video recording cancelled.",
                             Toast.LENGTH_LONG).show()
