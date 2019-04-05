@@ -4,9 +4,9 @@ nye tests af mulighedderne med camera i android
 Hent billede fra filsystemet
 -
 Her er et udsnit af koden:
-'''
+´´´
   // TODO: skriv kode
-'''
+´´´
 
 Tag et billede, gem det og vis det på skærmen
 -
